@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WS Engenharia - Sistema de Gerenciamento</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #e9eef3, #cdd9e5);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ===== Fundo decorativo ===== */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background-image: url('https://www.transparenttextures.com/patterns/blueprint.png');
+      background-size: 800px;
+      opacity: 0.07;
+      animation: moveBg 50s linear infinite;
+    }
+
+    @keyframes moveBg {
+      from { transform: translate(0, 0); }
+      to { transform: translate(-400px, -400px); }
+    }
+
+    .gear-bg {
+      position: absolute;
+      opacity: 0.05;
+      animation: rotateGear 50s linear infinite;
+      filter: grayscale(1);
+    }
+
+    .gear-bg img {
+      width: 250px;
+      height: 250px;
+    }
+
+    .gear-bg:nth-child(1) { top: 10%; left: 10%; }
+    .gear-bg:nth-child(2) { bottom: 5%; right: 15%; animation-duration: 80s; }
+
+    @keyframes rotateGear {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* ===== Container ===== */
+    .container {
+      position: relative;
+      z-index: 5;
+      width: 90%;
+      max-width: 520px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(14px);
+      border-radius: 20px;
+      padding: 50px 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      animation: fadeIn 1s ease;
+      transition: all 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      width: 110px;
+      height: 110px;
+      margin-bottom: 25px;
+      animation: spin 7s linear infinite;
+      filter: grayscale(0.3) brightness(0.9);
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: #1a1a1a;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 30px;
+    }
+
+    /* ===== Login box ===== */
+    .login-box {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: all 0.5s ease;
+    }
+
+    .login-box input {
+      padding: 14px;
+      border-radius: 12px;
+      border: 1.8px solid #444;
+      font-size: 1.05rem;
+      transition: 0.3s;
+    }
+
+    .login-box input:focus {
+      border-color: #000;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+      outline: none;
+    }
+
+    .login-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+      flex-wrap: wrap;
+    }
+
+    .login-options label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .forgot-password {
+      color: #000;
+      text-decoration: none;
+      transition: 0.3s;
+      font-weight: 500;
+    }
+
+    .forgot-password:hover {
+      text-decoration: underline;
+    }
+
+    .login-btn {
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-weight: 600;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .login-btn:hover {
+      background: #333;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    }
+
+    /* ===== MENU ===== */
+    .menu {
+      display: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+    }
+
+    .menu.show {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .btn {
+      flex: 1 1 180px;
+      padding: 18px;
+      border-radius: 14px;
+      background: white;
+      border: 2px solid #111;
+      font-weight: 600;
+      color: #111;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      min-width: 180px;
+    }
+
+    .btn:hover {
+      background: #000;
+      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+
+    @media (min-width: 720px) {
+      .container {
+        max-width: 800px;
+      }
+
+      .menu {
+        gap: 1.5rem;
+      }
+
+      .btn {
+        flex: 1 1 calc(33% - 1.5rem);
+        max-width: 220px;
+        font-size: 1.05rem;
+      }
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #111;
+      color: #fff;
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 0.8rem;
+      letter-spacing: 0.03em;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        max-width: 90%;
+        padding: 35px 25px;
+      }
+      h1 { font-size: 1.5rem; }
+      .btn { flex: 1 1 140px; font-size: 0.9rem; padding: 14px; }
+      .logo { width: 80px; height: 80px; }
+    }
+  </style>
+</head>
+<body>
+    
+  <div class="gear-bg"><img src="engrenagem-logo.png" alt="Engrenagem"></div>
+  <div class="gear-bg"><img src="engrenagem-logo.png" alt="Engrenagem"></div>
+
+  <div class="container">
+    <img src="engrenagem-logo.png" alt="Logo" class="logo">
+    <h1>Sistema de Gerenciamento WS Engenharia</h1>
+
+    <!-- LOGIN -->
+    <div class="login-box" id="loginBox">
+      <input type="text" id="username" placeholder="Usuário">
+      <input type="password" id="password" placeholder="Senha">
+
+      <div class="login-options">
+        <label><input type="checkbox" id="remember"> Lembrar minha senha</label>
+        <a href="#" class="forgot-password" onclick="alert('Um link de redefinição foi enviado ao seu e-mail cadastrado.')">Esqueci a senha</a>
+      </div>
+
+      <button class="login-btn" onclick="login()">Entrar</button>
+    </div>
+
+    <!-- MENU -->
+    <div class="menu" id="menuPrincipal">
+      <button class="btn" data-page="fluxo.html"><i class="fas fa-chart-line"></i>Fluxo de Caixa</button>
+      <button class="btn" data-page="clientes.html"><i class="fas fa-users"></i>Clientes</button>
+      <button class="btn" data-page="certificados.html"><i class="fas fa-certificate"></i>Certificados</button>
+      <button class="btn" data-page="avisos.html"><i class="fas fa-bullhorn"></i>Avisos</button>
+      <button class="btn" data-page="config.html"><i class="fas fa-gear"></i>Configurações</button>
+    </div>
+  </div>
+
+  <footer>
+    Desenvolvido por AtecSeven Tecnologia © 2025
+  </footer>
+
+  <script>
+    const loginBox = document.getElementById("loginBox");
+    const menu = document.getElementById("menuPrincipal");
+
+    // Restaura login lembrado
+    window.onload = () => {
+      const savedUser = localStorage.getItem("user");
+      const savedPass = localStorage.getItem("pass");
+      if (savedUser && savedPass) {
+        document.getElementById("username").value = savedUser;
+        document.getElementById("password").value = savedPass;
+        document.getElementById("remember").checked = true;
+      }
+      loginBox.style.display = "flex";
+      menu.classList.remove("show");
+    };
+
+    function login() {
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      const remember = document.getElementById("remember").checked;
+
+      if (user === "WS ENGENHARIA" && pass === "WS ENGENHARIA") {
+        if (remember) {
+          localStorage.setItem("user", user);
+          localStorage.setItem("pass", pass);
+        } else {
+          localStorage.removeItem("user");
+          localStorage.removeItem("pass");
+        }
+        loginBox.style.display = "none";
+        menu.classList.add("show");
+      } else {
+        loginBox.style.border = "2px solid red";
+        setTimeout(() => loginBox.style.border = "none", 1000);
+      }
+    }
+
+    // Redirecionamento funcional
+    document.querySelectorAll('.btn[data-page]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const page = e.currentTarget.getAttribute('data-page');
+        window.location.assign(page); // substitui a página atual
+      });
+    });
+  </script>
+</body>
+</html>
